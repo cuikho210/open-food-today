@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [ "common","migrate"]
+
+[workspace.package]
+authors = ["cuikho210"]
+description = "open-food-today APIs server"
+edition = "2021"
+license = "MIT"
+publish = false
+repository = "https://github.com/cuikho210/open-food-today"
+version = "0.1.0"
