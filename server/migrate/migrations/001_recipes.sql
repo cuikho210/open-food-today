@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.recipes (
+CREATE TABLE IF NOT EXISTS recipes (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     link VARCHAR(512),
