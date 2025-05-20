@@ -1,0 +1,38 @@
+.text-normal {
+	color: var(--color-text);
+}
+
+.text-info {
+	color: var(--color-text-info);
+}
+
+.text-danger {
+	color: var(--color-text-danger);
+}
+
+.text-secondary {
+	opacity: 0.4;
+	color: var(--color-text);
+}
+
+.text-success {
+	color: var(--color-text-success);
+}
+
+.text-small {
+	font-size: 0.88rem;
+}
+
+.text-italic {
+	font-style: italic;
+}
+
+.icon-24 {
+	font-size: 20px;
+}
+
+.text-ellipsis {
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
