@@ -1,7 +1,17 @@
 <script lang="ts">
-	import { Container } from '@celar-ui/svelte';
+	import { AppBar, Container } from '@celar-ui/svelte';
+	import { t } from '$lib/i18n/index';
+	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
 </script>
 
-<Container sm>
-	<h1>Ahihi</h1>
-</Container>
+<AppBar>
+	{#snippet title()}
+		{$t.common.foodToday}
+	{/snippet}
+
+	{#snippet actions()}
+		<AppSettingsButton />
+	{/snippet}
+</AppBar>
+
+<Container sm></Container>

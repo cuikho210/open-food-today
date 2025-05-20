@@ -4,8 +4,11 @@
 	import '@celar-ui/svelte/src/styles/misc.scss';
 	import '$styles/index.scss';
 	import '$styles/utils.scss';
+	import AppSettingsDialog from '$lib/components/AppSettingsDialog.svelte';
 
 	let { children } = $props();
 </script>
 
 {@render children()}
+
+<AppSettingsDialog />
