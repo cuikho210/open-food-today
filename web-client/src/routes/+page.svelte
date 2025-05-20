@@ -1,17 +1,78 @@
 <script lang="ts">
-	import { AppBar, Container } from '@celar-ui/svelte';
+	import { AppBar, Card, Container, Gap } from '@celar-ui/svelte';
 	import { t } from '$lib/i18n/index';
 	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
+	import { register } from 'swiper/element/bundle';
+
+	register();
 </script>
 
-<AppBar>
-	{#snippet title()}
-		{$t.common.foodToday}
-	{/snippet}
+<main>
+	<AppBar>
+		{#snippet title()}
+			{$t.common.foodToday}
+		{/snippet}
 
-	{#snippet actions()}
-		<AppSettingsButton />
-	{/snippet}
-</AppBar>
+		{#snippet actions()}
+			<AppSettingsButton />
+		{/snippet}
+	</AppBar>
 
-<Container sm></Container>
+	<Container sm>
+		<swiper-container direction="vertical" slides-per-view="1">
+			{#snippet slide(content: string)}
+				<swiper-slide>
+					<Card class="slide-card" fluid>
+						{content}
+						<Gap size="200px" />
+					</Card>
+				</swiper-slide>
+			{/snippet}
+
+			{@render slide('Slide 1')}
+			{@render slide('Slide 2')}
+			{@render slide('Slide 3')}
+			{@render slide('Slide 4')}
+		</swiper-container>
+	</Container>
+</main>
+
+<style lang="scss">
+	main {
+		position: relative;
+		width: 100lvw;
+		height: 100dvh;
+		background-color: var(--color-primary--lighter);
+		background-image: url('/bg0.jpg');
+	}
+
+	:global([data-app-bar]) {
+		position: fixed !important;
+		top: 0;
+		width: 100%;
+		z-index: 50;
+		background-color: rgba(255, 255, 255, 0.5) !important;
+		border-bottom: 2px solid var(--color-bg);
+	}
+
+	:global(.slide-card) {
+		max-height: calc(100dvh - 48px);
+		background-color: rgba(255, 255, 255, 0.5) !important;
+		border: 2px solid var(--color-bg);
+		backdrop-filter: blur(var(--blur-length));
+		overflow-y: auto;
+	}
+
+	swiper-container {
+		position: relative;
+		width: 100%;
+		height: 100dvh;
+
+		swiper-slide {
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+</style>
