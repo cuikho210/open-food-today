@@ -24,7 +24,7 @@
 				<swiper-slide>
 					<Card class="slide-card" fluid>
 						{content}
-						<Gap size="200px" />
+						<Gap size="100vh" />
 					</Card>
 				</swiper-slide>
 			{/snippet}
@@ -51,25 +51,25 @@
 		top: 0;
 		width: 100%;
 		z-index: 50;
-		background-color: rgba(255, 255, 255, 0.5) !important;
+		background-color: rgba(var(--color-bg--rgb), 0.5) !important;
 		border-bottom: 2px solid var(--color-bg);
 	}
 
 	:global(.slide-card) {
-		max-height: calc(100dvh - 48px);
-		background-color: rgba(255, 255, 255, 0.5) !important;
+		max-height: calc(100dvh - 84px);
+		background-color: rgba(var(--color-bg--rgb), 0.5) !important;
 		border: 2px solid var(--color-bg);
 		backdrop-filter: blur(var(--blur-length));
-		overflow-y: auto;
+		overflow: hidden;
 	}
 
 	swiper-container {
 		position: relative;
 		width: 100%;
 		height: 100dvh;
+		padding-top: 16px;
 
 		swiper-slide {
-			text-align: center;
 			display: flex;
 			justify-content: center;
 			align-items: center;
