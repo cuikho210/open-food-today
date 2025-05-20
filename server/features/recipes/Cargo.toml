@@ -13,12 +13,7 @@ axum = "0.8.4"
 common = { version = "0.1.0", path = "../../common" }
 eyre = "0.6.12"
 recipes-models = { version = "0.1.0", path = "../recipes-models" }
-sqlx = { version = "0.8.5", features = ["postgres", "runtime-tokio", "chrono", "migrate"] }
+sqlx = { version = "0.8.5", features = ["postgres", "runtime-tokio", "chrono"] }
 tokio = { version = "1.45.0", features = ["macros", "rt-multi-thread"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"
-
-[dev-dependencies]
-serde_json = "1.0"
-tower = "0.4"
-hyper = { version = "0.14", features = ["full"] }
