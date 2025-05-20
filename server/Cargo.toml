@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "common","migrate"]
+members = [ "common","migrate", "recipes", "recipes-models"]
 
 [workspace.package]
 authors = ["cuikho210"]
