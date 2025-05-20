@@ -18,7 +18,7 @@
 		{/snippet}
 	</AppBar>
 
-	<Container sm>
+	<Container sm style="padding: 0">
 		<swiper-container direction="vertical" slides-per-view="1">
 			{#snippet slide(content: string)}
 				<swiper-slide>
@@ -44,6 +44,7 @@
 		height: 100dvh;
 		background-color: var(--color-primary--lighter);
 		background-image: url('/bg0.jpg');
+		overflow: hidden;
 	}
 
 	:global([data-app-bar]) {
@@ -67,12 +68,13 @@
 		position: relative;
 		width: 100%;
 		height: 100dvh;
-		padding-top: 16px;
+		padding: var(--gap);
 
 		swiper-slide {
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			padding-top: 48px;
 		}
 	}
 </style>
