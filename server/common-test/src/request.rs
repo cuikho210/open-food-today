@@ -52,11 +52,11 @@ impl RequestBuilder {
         Ok(self)
     }
 
-    pub async fn get<'a>(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
+    pub async fn get(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
         self.send("GET", server).await
     }
 
-    async fn send<'a>(
+    async fn send(
         self,
         method: &str,
         server: &mut RouterIntoService<Body>,
@@ -81,11 +81,11 @@ impl RequestBuilder {
 
         for (index, (key, value)) in self.query_map.iter().enumerate() {
             if index > 0 {
-                result.push_str("&");
+                result.push('&');
             }
 
             result.push_str(key);
-            result.push_str("=");
+            result.push('=');
             result.push_str(value);
         }
 
