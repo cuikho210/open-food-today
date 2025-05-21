@@ -235,6 +235,7 @@ dependencies = [
  "eyre",
  "serde",
  "thiserror",
+ "tower-http",
 ]
 
 [[package]]
@@ -373,7 +374,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "endpoint"
+name = "entrypoint"
 version = "0.1.0"
 dependencies = [
  "axum",

@@ -13,3 +13,4 @@ axum = "0.8.4"
 eyre = "0.6.12"
 serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
+tower-http = { version = "0.6.4", features = ["cors"] }
