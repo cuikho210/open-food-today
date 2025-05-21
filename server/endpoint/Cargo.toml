@@ -1,0 +1,18 @@
+[package]
+name = "endpoint"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+axum = "0.8.4"
+color-eyre = "0.6.4"
+eyre = "0.6.12"
+recipes = { version = "0.1.0", path = "../features/recipes" }
+tokio = { version = "1.45.0", features = ["rt-multi-thread"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"

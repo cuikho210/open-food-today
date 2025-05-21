@@ -14,6 +14,7 @@ common = { version = "0.1.0", path = "../../common" }
 eyre = "0.6.12"
 recipes-models = { version = "0.1.0", path = "../recipes-models" }
 sqlx = { version = "0.8.5", features = ["postgres", "runtime-tokio", "chrono"] }
+tower-http = { version = "0.6.4", features = ["trace"] }
 tracing = "0.1.41"
 
 [dev-dependencies]

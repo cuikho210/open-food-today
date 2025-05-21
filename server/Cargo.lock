@@ -373,6 +373,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "endpoint"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "color-eyre",
+ "eyre",
+ "recipes",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1242,6 +1255,7 @@ dependencies = [
  "recipes-models",
  "sqlx",
  "tokio",
+ "tower-http",
  "tracing",
 ]
 
@@ -1829,6 +1843,22 @@ dependencies = [
  "pin-project-lite",
  "sync_wrapper",
  "tokio",
+ "tower-layer",
+ "tower-service",
+ "tracing",
+]
+
+[[package]]
+name = "tower-http"
+version = "0.6.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fdb0c213ca27a9f57ab69ddb290fd80d970922355b83ae380b395d3986b8a2e"
+dependencies = [
+ "bitflags",
+ "bytes",
+ "http",
+ "http-body",
+ "pin-project-lite",
  "tower-layer",
  "tower-service",
  "tracing",
