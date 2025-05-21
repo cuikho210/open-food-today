@@ -1,0 +1,9 @@
+services:
+  server:
+    container_name: open-food-today-server
+    build:
+      context: ./server
+      dockerfile: ./entrypoint/Dockerfile
+    env_file: "./.env"
+    ports:
+      - 3310:3310
