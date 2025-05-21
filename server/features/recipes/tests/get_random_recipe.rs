@@ -13,7 +13,7 @@ pub async fn test_get_random_recipe_success() -> Result<()> {
     };
 
     let res = RequestBuilder::default()
-        .uri("/recipes/random")
+        .uri("/random")
         .get(&mut server)
         .await?;
     let recipe: Recipe = res.json().await?;
@@ -33,7 +33,7 @@ pub async fn test_get_random_n_recipes_success() -> Result<()> {
 
     let n = 5;
     let res = RequestBuilder::default()
-        .uri(&format!("/recipes/random/{}", n))
+        .uri(&format!("/random/{}", n))
         .get(&mut server)
         .await?;
 

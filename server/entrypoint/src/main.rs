@@ -12,7 +12,9 @@ async fn main() -> Result<()> {
     color_eyre::install()?;
 
     let app = make_app().await?;
+
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3310").await?;
+    tracing::info!("Starting server on http://{}", listener.local_addr()?);
     axum::serve(listener, app).await?;
 
     Ok(())
