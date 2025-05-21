@@ -12,10 +12,24 @@ pub async fn get_random_recipe(db: &PgPool) -> Result<Option<Recipe>> {
             )) + (SELECT MIN(id) FROM recipes)
         )
         ORDER BY id
-        LIMIT 1"
+        LIMIT 1",
     )
     .fetch_optional(db)
     .await?;
 
     Ok(recipe)
+}
+
+pub async fn get_random_n_recipes(db: &PgPool, n: i64) -> Result<Vec<Recipe>> {
+    let recipes = sqlx::query_as::<_, Recipe>(
+        "SELECT *
+        FROM recipes
+        ORDER BY random()
+        LIMIT $1",
+    )
+    .bind(n)
+    .fetch_all(db)
+    .await?;
+
+    Ok(recipes)
 }
