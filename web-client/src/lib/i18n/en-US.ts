@@ -4,6 +4,7 @@ export const messagesEnUS = {
 		oops: 'Oops!!!',
 		foodToday: 'Food Today',
 		settings: 'Settings',
-		language: 'Language'
+		language: 'Language',
+		unexpectedError: 'An unexpected error occurred.'
 	}
 };
