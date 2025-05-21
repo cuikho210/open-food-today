@@ -1,4 +1,5 @@
 use axum::Router;
+use common::middlewares::cors;
 use eyre::Result;
 
 #[tokio::main]
@@ -19,5 +20,5 @@ async fn main() -> Result<()> {
 
 async fn make_app() -> Result<Router> {
     let recipes = recipes::make_app().await?;
-    Ok(Router::new().nest("/recipes", recipes))
+    Ok(Router::new().nest("/recipes", recipes).layer(cors()))
 }
