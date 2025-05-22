@@ -1,7 +1,5 @@
 import type { I18nSchema } from './i18n';
 
-export type ErrorResponse = { error_code: string; message: string };
-
 export enum ApiErrorCode {
 	CUSTOM_ERROR = 'CUSTOM_ERROR',
 	INTERNAL_SERVER = 'INTERNAL_SERVER',

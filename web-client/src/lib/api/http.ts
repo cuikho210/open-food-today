@@ -1,8 +1,9 @@
 import { CacheType } from '$lib/caches/types.d';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { matchCacheByUri, putCache } from '../caches/cache';
-import { ApiError, ApiErrorCode, type ErrorResponse } from '../error';
+import { ApiError, ApiErrorCode } from '../error';
 import { API_BASE } from './config';
+import type { ErrorResponse } from '$lib/ts-binding/common';
 
 class Http {
 	private base = API_BASE;

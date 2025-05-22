@@ -5,14 +5,17 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+use ts_rs::TS;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export, export_to = "common.d.ts")]
 pub struct ErrorResponse {
     pub error_code: String,
     pub message: String,
 }
 
-#[derive(Error, Debug, Clone, Serialize, Deserialize)]
+#[derive(Error, Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export, export_to = "common.d.ts")]
 pub enum AppError {
     #[error("{0}")]
     Custom(String, u16),
