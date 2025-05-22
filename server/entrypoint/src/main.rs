@@ -13,7 +13,12 @@ async fn main() -> Result<()> {
 
     let app = make_app().await?;
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3310").await?;
+    let host = std::env::var("HOST").unwrap_or("127.0.0.1".to_owned());
+    let port = std::env::var("PORT")
+        .map(|v| v.parse::<u16>().unwrap())
+        .unwrap_or(3310);
+    let listener = tokio::net::TcpListener::bind(format!("{}:{}", host, port)).await?;
+
     tracing::info!("Starting server on http://{}", listener.local_addr()?);
     axum::serve(listener, app).await?;
 
