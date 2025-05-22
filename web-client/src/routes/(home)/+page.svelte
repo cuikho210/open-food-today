@@ -2,33 +2,61 @@
 	import { t } from '$lib/i18n/index';
 	import { register } from 'swiper/element/bundle';
 	import { onMount } from 'svelte';
-	import { getRandomRecipes } from '$lib/api/recipes';
+	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
 	import { AppBar, Card, Container, Gap } from '@celar-ui/svelte';
 	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
 	import type { PageProps } from './$types';
 	import type { Swiper } from 'swiper/types';
+	import type { Recipe } from '$lib/ts-binding/recipes';
 
 	register();
 
 	let pageProps: PageProps = $props();
-	let recipes = $state(pageProps.data.initRecipes);
+	let recipes = $state<(Recipe | number)[]>(pageProps.data.initRecipes);
 	let fetchLengh = pageProps.data.initRecipes.length;
 	let safeLength = 5;
+	let loading = $state(false);
 
 	let swiperEl: HTMLElement;
 
 	onMount(() => {
-		swiperEl.addEventListener('swiperslidechange', (event) => {
+		swiperEl.addEventListener('swiperslidechange', async (event) => {
 			const swiper = (event as CustomEvent).detail[0] as Swiper;
-			if (swiper.activeIndex > recipes.length - safeLength) {
-				fetchMoreRecipes();
+			const activeIndex = swiper.activeIndex;
+
+			if (typeof recipes[activeIndex] === 'number') {
+				const recipe = await getRecipeById(recipes[activeIndex]);
+				if (recipe) {
+					recipes[activeIndex] = recipe;
+				}
+			}
+
+			releaseRecipe(activeIndex - safeLength);
+
+			if (activeIndex > recipes.length - safeLength && !loading) {
+				await fetchMoreRecipes();
 			}
 		});
 	});
 
+	function releaseRecipe(index: number) {
+		const recipe = recipes[index];
+		if (recipe && typeof recipe != 'number') {
+			recipes[index] = recipe.id;
+		}
+	}
+
 	async function fetchMoreRecipes() {
-		const moreRecipes = await getRandomRecipes(fetchLengh);
-		recipes = recipes.concat(moreRecipes);
+		loading = true;
+
+		try {
+			const moreRecipes = await getRandomRecipes(fetchLengh);
+			recipes = recipes.concat(moreRecipes);
+		} catch (e) {
+			console.error(e);
+		}
+
+		loading = false;
 	}
 </script>
 
@@ -47,19 +75,23 @@
 		<swiper-container bind:this={swiperEl} direction="vertical" slides-per-view="1">
 			{#each recipes as recipe, index (index)}
 				<swiper-slide>
-					<Card class="slide-card" fluid>
-						<a href={recipe.link} target="_blank">
-							<img src={recipe.image_url} alt={recipe.title} />
-						</a>
-
-						<article>
-							<a href={recipe.link} target="_blank" class="text-info">
-								<h2>{recipe.title}</h2>
+					{#if typeof recipe == 'number'}
+						<p>Loading...</p>
+					{:else}
+						<Card class="slide-card" fluid>
+							<a href={recipe.link} target="_blank">
+								<img src={recipe.image_url} alt={recipe.title} />
 							</a>
-							<Gap size=".5rem" />
-							<p>{recipe.description}</p>
-						</article>
-					</Card>
+
+							<article>
+								<a href={recipe.link} target="_blank" class="text-info">
+									<h2>{recipe.title}</h2>
+								</a>
+								<Gap size=".5rem" />
+								<p>{recipe.description}</p>
+							</article>
+						</Card>
+					{/if}
 				</swiper-slide>
 			{/each}
 		</swiper-container>
