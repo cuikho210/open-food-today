@@ -20,6 +20,17 @@ pub async fn get_random_recipe(db: &PgPool) -> Result<Option<Recipe>> {
     Ok(recipe)
 }
 
+pub async fn get_recipe_by_id(db: &PgPool, id: i64) -> Result<Option<Recipe>> {
+    let recipe = sqlx::query_as::<_, Recipe>(
+        "SELECT * FROM recipes WHERE id = $1"
+    )
+    .bind(id)
+    .fetch_optional(db)
+    .await?;
+
+    Ok(recipe)
+}
+
 pub async fn get_random_n_recipes(db: &PgPool, n: i64) -> Result<Vec<Recipe>> {
     let recipes = sqlx::query_as::<_, Recipe>(
         "SELECT *

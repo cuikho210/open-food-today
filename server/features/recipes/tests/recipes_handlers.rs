@@ -57,3 +57,36 @@ pub async fn test_get_random_n_recipes_success() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_get_recipe_by_id_success() -> Result<()> {
+    setup_logging();
+
+    let mut server = {
+        let app = make_app().await?;
+        make_service(app).await?
+    };
+
+    let test_id = 1;
+    let res = RequestBuilder::default()
+        .uri(&format!("/{}", test_id))
+        .get(&mut server)
+        .await?;
+
+    {
+        let status = res.status();
+        if !status.is_success() {
+            let text = res.text().await?;
+            panic!("Request failed with status: {}, body: {}", status, text);
+        }
+    }
+
+    // Attempt to parse the response as an Option<Recipe>.
+    // The test passes if the request was successful (status 200) and the body
+    // can be deserialized into Option<Recipe>, regardless of whether a recipe
+    // was actually found or not (which depends on database state).
+    let recipe: Option<Recipe> = res.json().await?;
+    tracing::info!("Get recipe by ID {}: {:#?}", test_id, recipe);
+
+    Ok(())
+}

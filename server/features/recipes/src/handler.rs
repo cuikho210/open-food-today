@@ -23,3 +23,10 @@ pub async fn get_random_n_recipes(
     let recipes = repo::get_random_n_recipes(&state.db, n as i64).await?;
     Ok(Json(recipes))
 }
+
+pub async fn get_recipe_by_id(
+    State(state): State<RecipesState>,
+    Path(id): Path<i64>,
+) -> Result<Json<Option<Recipe>>, AppError> {
+    Ok(Json(repo::get_recipe_by_id(&state.db, id).await?))
+}
