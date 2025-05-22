@@ -5,24 +5,21 @@ export class PersistCacheStorage {
 	private dbKey = 'persist-cache-storage';
 	private storeKey = 'persist-cache';
 	private dbPromise: Promise<IDBPDatabase> | undefined;
-	private db: IDBPDatabase | undefined;
 
 	constructor() {
 		this.createDb();
 	}
 
 	private async createDb() {
-		this.dbPromise =
-			this.dbPromise ??
-			openDB(this.dbKey, 1, {
+		if (!this.dbPromise) {
+			this.dbPromise = openDB(this.dbKey, 1, {
 				upgrade: (db) => {
 					db.createObjectStore(this.storeKey);
 				}
 			});
+		}
 
-		this.db = await this.dbPromise;
-		this.dbPromise = undefined;
-		return this.db;
+		return await this.dbPromise;
 	}
 
 	public async put(req: RequestInfo | URL, res: CacheResponse) {

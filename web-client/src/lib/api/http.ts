@@ -74,8 +74,7 @@ class Http {
 			res = await axios(url, {
 				method: this.method,
 				headers: this.headers,
-				data: this.body,
-				withCredentials: true
+				data: this.body
 			});
 		} catch (_e) {
 			const e = _e as AxiosError<ErrorResponse>;
