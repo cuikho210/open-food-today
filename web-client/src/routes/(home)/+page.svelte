@@ -135,6 +135,16 @@
 			object-fit: cover;
 			border-radius: var(--radius);
 		}
+
+		@media screen and (min-width: 840px) {
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: center;
+
+			img {
+				width: 360px;
+			}
+		}
 	}
 
 	swiper-container {
