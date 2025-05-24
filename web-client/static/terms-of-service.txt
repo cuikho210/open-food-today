@@ -1,0 +1,85 @@
+TERMS OF SERVICE
+
+Last updated: May 2025
+
+1. ACCEPTANCE OF TERMS
+
+By accessing and using Food Today ("Service", "Platform", "Website"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+
+2. DESCRIPTION OF SERVICE
+
+Food Today is a web-based platform that allows users to discover, create, manage, and share food recipes. The Service includes features such as recipe recommendations, menu planning, and user-generated content.
+
+3. USER ACCOUNTS
+
+3.1 To access certain features of the Service, you may be required to create an account.
+3.2 You are responsible for maintaining the confidentiality of your account credentials.
+3.3 You are responsible for all activities that occur under your account.
+3.4 You must provide accurate and complete information when creating your account.
+3.5 You must notify us immediately of any unauthorized use of your account.
+
+4. USER CONTENT
+
+4.1 You retain ownership of any recipes, comments, or other content you submit to the Service ("User Content").
+4.2 By submitting User Content, you grant Food Today a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and distribute your content in connection with the Service.
+4.3 You represent and warrant that you have the right to submit User Content and that it does not infringe any third-party rights.
+4.4 You are solely responsible for your User Content and the consequences of posting it.
+
+5. PROHIBITED USES
+
+You may not use the Service:
+5.1 For any unlawful purpose or to solicit others to take unlawful actions
+5.2 To violate any applicable laws or regulations
+5.3 To infringe upon or violate our intellectual property rights or the intellectual property rights of others
+5.4 To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate
+5.5 To submit false or misleading information
+5.6 To upload or transmit viruses or any other type of malicious code
+5.7 To spam, phish, pharm, pretext, spider, crawl, or scrape
+5.8 For any obscene or immoral purpose
+5.9 To interfere with or circumvent the security features of the Service
+
+6. INTELLECTUAL PROPERTY RIGHTS
+
+6.1 The Service and its original content, features, and functionality are and will remain the exclusive property of Food Today and its licensors.
+6.2 The Service is protected by copyright, trademark, and other laws.
+6.3 Our trademarks and trade dress may not be used in connection with any product or service without our prior written consent.
+
+7. PRIVACY POLICY
+
+Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the Service.
+
+8. TERMINATION
+
+8.1 We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever.
+8.2 If you wish to terminate your account, you may simply discontinue using the Service.
+
+9. DISCLAIMER
+
+9.1 The information on this Service is provided on an "as is" basis.
+9.2 We disclaim all warranties, express or implied, including but not limited to implied warranties of merchantability and fitness for a particular purpose.
+9.3 We do not guarantee the accuracy, completeness, or usefulness of any recipe or nutritional information.
+9.4 Users are responsible for verifying recipe ingredients and instructions before use.
+
+10. LIMITATION OF LIABILITY
+
+In no event shall Food Today, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, punitive, consequential, or special damages arising out of or related to your use of the Service.
+
+11. GOVERNING LAW
+
+These Terms shall be interpreted and governed by applicable laws, without regard to conflict of law provisions.
+
+12. CHANGES TO TERMS
+
+We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect.
+
+13. CONTACT INFORMATION
+
+If you have any questions about these Terms of Service, please contact us through the contact information provided on our website.
+
+14. SEVERABILITY
+
+If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms will otherwise remain in full force and effect.
+
+15. ENTIRE AGREEMENT
+
+These Terms of Service constitute the entire agreement between you and Food Today regarding the use of the Service, superseding any prior agreements between you and Food Today relating to your use of the Service.
