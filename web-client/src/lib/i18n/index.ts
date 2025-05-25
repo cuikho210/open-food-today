@@ -1,11 +1,13 @@
 import { writable } from 'svelte/store';
-import { messagesEnUS } from './en-US';
+import { browser } from '$app/environment';
+import { type messagesEnUS } from './en-US';
+import type { Cookies } from '@sveltejs/kit';
 
 export type I18nSchema = typeof messagesEnUS;
 export const messages = {
 	'en-US': {
 		name: 'English',
-		messages: async () => messagesEnUS
+		messages: async () => (await import('./en-US')).messagesEnUS
 	},
 	'vi-VN': {
 		name: 'Tiếng Việt',
@@ -13,12 +15,25 @@ export const messages = {
 	}
 };
 export type I18nLocale = keyof typeof messages;
-export const t = writable<I18nSchema>(messagesEnUS);
+export const t = writable<I18nSchema>();
 
-const storeKey = 'app-locale';
+const cookieName = 'app-locale';
 
-export function init() {
-	const storedLocaleKey = (localStorage.getItem(storeKey) as I18nLocale) || 'en-US';
+export function init(cookies?: Cookies) {
+	let storedLocaleKey: I18nLocale = 'vi-VN';
+
+	if (cookies) {
+		const cookie = cookies.get(cookieName) as I18nLocale | undefined;
+		if (cookie) {
+			storedLocaleKey = cookie;
+		}
+	} else {
+		const cookie = getClientCookie();
+		if (cookie) {
+			storedLocaleKey = cookie;
+		}
+	}
+
 	setLocale(storedLocaleKey);
 }
 
@@ -27,7 +42,29 @@ export async function setLocale(localeCode: I18nLocale) {
 	if (!newLocaleMessage) return;
 
 	t.set(await newLocaleMessage());
-	document.documentElement.setAttribute('lang', localeCode.substring(0, 2));
 
-	localStorage.setItem(storeKey, localeCode);
+	if (browser) {
+		document.documentElement.setAttribute('lang', localeCode.substring(0, 2));
+	}
+
+	setClientCookie(localeCode);
+}
+
+function setClientCookie(locale: I18nLocale) {
+	if (!browser) return;
+	document.cookie = cookieName + '=' + locale;
+}
+
+function getClientCookie(): I18nLocale | null {
+	if (!browser)
+		throw new Error('getClientCookie should only be called in the browser environment.');
+
+	const cookies = document.cookie.split(';');
+	for (let i = 0; i < cookies.length; i++) {
+		const cookie = cookies[i].trim();
+		if (cookie.startsWith(cookieName + '=')) {
+			return cookie.substring(cookieName.length + 1) as I18nLocale;
+		}
+	}
+	return null;
 }

@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { init as initI18n } from '$lib/i18n';
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
@@ -78,4 +79,9 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle: Handle = sequence(supabase, authGuard);
+const i18n: Handle = async ({ event, resolve }) => {
+	initI18n(event.cookies);
+	return resolve(event);
+};
+
+export const handle: Handle = sequence(supabase, authGuard, i18n);
