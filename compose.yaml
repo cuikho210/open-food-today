@@ -4,7 +4,7 @@ services:
     build:
       context: ./server
       dockerfile: ./entrypoint/Dockerfile
-    env_file: "./.env"
+    env_file: "./.env.local"
     environment:
       HOST: 0.0.0.0
     ports:
