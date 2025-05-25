@@ -1,3 +1,4 @@
 export const layout = $state({
-	openAppSettings: false
+	openAppSettings: false,
+	openLoginDialog: false
 });

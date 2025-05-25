@@ -6,11 +6,12 @@
 	import '$styles/utils.scss';
 	import '$styles/celar-components.scss';
 	import AppSettingsDialog from '$lib/components/AppSettingsDialog.svelte';
+	import LoginDialog from '$lib/components/LoginDialog.svelte';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	let { data, children } = $props();
-	let { session, supabase } = $derived(data);
+	let { session, supabase, user } = data;
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
@@ -25,4 +26,8 @@
 
 {@render children()}
 
-<AppSettingsDialog />
+<AppSettingsDialog {user} {supabase} />
+
+{#if !session}
+	<LoginDialog {supabase} />
+{/if}

@@ -5,6 +5,7 @@
 	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
 	import { AppBar, Card, Container, Gap } from '@celar-ui/svelte';
 	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
+	import OpenLoginDialogButton from '$lib/components/OpenLoginDialogButton.svelte';
 	import type { PageProps } from './$types';
 	import type { Swiper } from 'swiper/types';
 	import type { Recipe } from '$lib/ts-binding/recipes';
@@ -12,6 +13,7 @@
 	register();
 
 	let pageProps: PageProps = $props();
+	let { user } = pageProps.data;
 	let recipes = $state<(Recipe | number)[]>(pageProps.data.initRecipes);
 	let fetchLengh = pageProps.data.initRecipes.length;
 	let safeLength = 5;
@@ -67,6 +69,12 @@
 		{/snippet}
 
 		{#snippet actions()}
+			{#if user}
+				{user.user_metadata.name}
+			{:else}
+				<OpenLoginDialogButton />
+			{/if}
+
 			<AppSettingsButton />
 		{/snippet}
 	</AppBar>

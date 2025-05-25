@@ -7,12 +7,16 @@ export const messagesViVN: I18nSchema = {
 		foodToday: 'Hôm Nay Ăn Gì',
 		settings: 'Cài đặt',
 		language: 'Ngôn ngữ',
-		unexpectedError: 'Lỗi không mong muốn'
+		unexpectedError: 'Lỗi không mong muốn',
+		login: 'Đăng nhập',
+		profile: 'Hồ sơ',
+		signOut: 'Đăng xuất'
 	},
 	auth: {
 		error: {
 			title: 'Xác Thực Thất Bại',
-			description: 'Chúng tôi gặp lỗi khi đăng nhập cho bạn. Điều này có thể do mã xác thực đã hết hạn hoặc không hợp lệ, hoặc do sự cố tạm thời với dịch vụ xác thực của chúng tôi.',
+			description:
+				'Chúng tôi gặp lỗi khi đăng nhập cho bạn. Điều này có thể do mã xác thực đã hết hạn hoặc không hợp lệ, hoặc do sự cố tạm thời với dịch vụ xác thực của chúng tôi.',
 			goHome: 'Về Trang Chủ'
 		}
 	}
