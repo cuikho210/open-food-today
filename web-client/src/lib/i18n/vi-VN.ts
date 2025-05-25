@@ -8,5 +8,12 @@ export const messagesViVN: I18nSchema = {
 		settings: 'Cài đặt',
 		language: 'Ngôn ngữ',
 		unexpectedError: 'Lỗi không mong muốn'
+	},
+	auth: {
+		error: {
+			title: 'Xác Thực Thất Bại',
+			description: 'Chúng tôi gặp lỗi khi đăng nhập cho bạn. Điều này có thể do mã xác thực đã hết hạn hoặc không hợp lệ, hoặc do sự cố tạm thời với dịch vụ xác thực của chúng tôi.',
+			goHome: 'Về Trang Chủ'
+		}
 	}
 };

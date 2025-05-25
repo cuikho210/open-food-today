@@ -6,5 +6,12 @@ export const messagesEnUS = {
 		settings: 'Settings',
 		language: 'Language',
 		unexpectedError: 'An unexpected error occurred.'
+	},
+	auth: {
+		error: {
+			title: 'Authentication Failed',
+			description: 'We encountered an error while trying to sign you in. This could be due to an expired or invalid authentication code, or a temporary issue with our authentication service.',
+			goHome: 'Go to Home'
+		}
 	}
 };

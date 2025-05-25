@@ -1,0 +1,13 @@
+[data-app-bar] {
+	border-bottom: 2px solid var(--color-bg);
+}
+
+[data-card] {
+	background-color: rgba(var(--color-bg--rgb), 0.88) !important;
+	border: 2px solid var(--color-bg);
+	backdrop-filter: blur(var(--blur-length));
+}
+
+[data-button-root] {
+	color: var(--color-text-info);
+}

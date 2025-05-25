@@ -33,6 +33,11 @@ body {
 	font-family: system-ui;
 }
 
+body {
+	background-color: var(--color-primary--lighter);
+	background-image: url('/bg0.jpg');
+}
+
 a {
 	text-decoration: none;
 }

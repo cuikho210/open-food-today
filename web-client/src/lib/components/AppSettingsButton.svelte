@@ -5,5 +5,5 @@
 </script>
 
 <IconButton onclick={() => (layout.openAppSettings = true)}>
-	<IconSettings class="icon-24 text-info" />
+	<IconSettings class="icon-24" />
 </IconButton>

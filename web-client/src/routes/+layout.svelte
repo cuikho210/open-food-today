@@ -4,6 +4,7 @@
 	import '@celar-ui/svelte/src/styles/misc.scss';
 	import '$styles/index.scss';
 	import '$styles/utils.scss';
+	import '$styles/celar-components.scss';
 	import AppSettingsDialog from '$lib/components/AppSettingsDialog.svelte';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';

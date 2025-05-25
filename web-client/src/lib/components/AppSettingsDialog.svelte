@@ -13,7 +13,7 @@
 	{/snippet}
 
 	{#snippet close()}
-		<IconClose class="icon-24 text-info" />
+		<IconClose class="icon-24" />
 	{/snippet}
 
 	<div>
