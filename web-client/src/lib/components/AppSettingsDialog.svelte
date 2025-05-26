@@ -11,7 +11,6 @@
 	import IconClose from '~icons/hugeicons/cancel-01';
 	import { messages, setLocale, t, type I18nLocale } from '$lib/i18n';
 	import { layout } from '$lib/stores/layout.svelte';
-	import { goto } from '$app/navigation';
 	import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 	let { user, supabase }: { user: User | null; supabase: SupabaseClient } = $props();
@@ -20,7 +19,7 @@
 	async function signOut() {
 		const { error } = await supabase.auth.signOut();
 		if (error) console.error(error);
-		goto('/');
+		location.reload();
 	}
 </script>
 

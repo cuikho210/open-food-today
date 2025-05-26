@@ -69,13 +69,11 @@
 		{/snippet}
 
 		{#snippet actions()}
-			{#if user}
-				{user.user_metadata.name}
-			{:else}
+			{#if !user}
 				<OpenLoginDialogButton />
 			{/if}
 
-			<AppSettingsButton />
+			<AppSettingsButton {user} />
 		{/snippet}
 	</AppBar>
 </div>
