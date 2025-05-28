@@ -6,7 +6,7 @@ members = [
     "features/recipes",
     "features/recipes-models",
     "common-test",
-    "entrypoint",
+    "entrypoint", "features/recipe-comments", "features/recipe-comments-models",
 ]
 
 [workspace.package]

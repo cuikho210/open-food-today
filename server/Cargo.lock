@@ -1248,6 +1248,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "recipe-comments"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "common",
+ "common-test",
+ "eyre",
+ "recipe-comments-models",
+ "sqlx",
+ "tokio",
+ "tower-http",
+ "tracing",
+]
+
+[[package]]
+name = "recipe-comments-models"
+version = "0.1.0"
+
+[[package]]
 name = "recipes"
 version = "0.1.0"
 dependencies = [
