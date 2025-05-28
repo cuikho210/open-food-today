@@ -1,5 +1,7 @@
 mod app_error;
 
+pub mod auth_utils;
+pub mod dto;
 pub mod env;
 pub mod middlewares;
 
