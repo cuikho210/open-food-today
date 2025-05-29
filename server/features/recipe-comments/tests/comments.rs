@@ -80,18 +80,22 @@ pub async fn test_get_random_recipe_success() -> Result<()> {
     // cmt1: top level comment
     assert_eq!(cmt1.level, 0);
     assert!(cmt1.parent_id.is_none());
+    assert!(cmt1.reply_to.is_none());
 
     // cmt2: reply to cmt1, so level should be cmt1.level + 1
     assert_eq!(cmt2.level, 1);
     assert_eq!(cmt2.parent_id, Some(cmt1.id));
+    assert_eq!(cmt2.reply_to, Some(cmt1.id));
 
     // cmt3: reply to cmt2, so level should be cmt2.level + 1 (capped at 2)
     assert_eq!(cmt3.level, 2);
     assert_eq!(cmt3.parent_id, Some(cmt2.id));
+    assert_eq!(cmt3.reply_to, Some(cmt2.id));
 
     // cmt4: reply to cmt3 (already level 3) remains at level 2 and uses cmt3's parent_id
     assert_eq!(cmt4.level, 2);
-    assert_eq!(cmt4.parent_id, cmt3.parent_id);
+    assert_eq!(cmt4.parent_id, Some(cmt2.id));
+    assert_eq!(cmt4.reply_to, Some(cmt3.id));
 
     Ok(())
 }
