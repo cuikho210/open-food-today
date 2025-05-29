@@ -11,6 +11,7 @@ pub struct RecipeComment {
     pub recipe_id: i64,
     pub user_id: Uuid,
     pub parent_id: Option<i64>,
+    pub reply_to: Option<i64>,
     pub level: i16,
     pub content: String,
     pub created_at: DateTime<Utc>,

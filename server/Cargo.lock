@@ -1359,6 +1359,7 @@ dependencies = [
  "serde",
  "sqlx",
  "ts-rs",
+ "uuid",
 ]
 
 [[package]]

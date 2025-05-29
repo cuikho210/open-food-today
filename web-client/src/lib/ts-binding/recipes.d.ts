@@ -5,7 +5,7 @@ export type Recipe = {
 	title: string;
 	link: string | null;
 	description: string | null;
-	author: bigint | null;
+	author: string | null;
 	image_url: string | null;
 	created_at: string;
 };
