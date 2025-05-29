@@ -27,5 +27,9 @@ async fn main() -> Result<()> {
 
 async fn make_app() -> Result<Router> {
     let recipes = recipes::make_app().await?;
-    Ok(Router::new().nest("/recipes", recipes).layer(cors()))
+    let recipe_comments = recipe_comments::make_app().await?;
+    Ok(Router::new()
+        .nest("/recipes", recipes)
+        .nest("/comments", recipe_comments)
+        .layer(cors()))
 }

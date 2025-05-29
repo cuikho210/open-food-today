@@ -394,6 +394,7 @@ dependencies = [
  "color-eyre",
  "common",
  "eyre",
+ "recipe-comments",
  "recipes",
  "tokio",
  "tracing",
