@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS recipe_comments (
     recipe_id BIGINT NOT NULL,
     user_id UUID NOT NULL REFERENCES auth.users(id),
     parent_id BIGINT REFERENCES recipe_comments(id), -- NULL for top-level comments
+    reply_to BIGINT REFERENCES recipe_comments(id), -- NULL for top-level comments
     level SMALLINT NOT NULL, -- 0 for top, 1 for reply 1, 2 for reply 2
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
