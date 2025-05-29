@@ -36,3 +36,30 @@ pub async fn get_recipe_comment_by_id(
         .fetch_optional(db)
         .await
 }
+
+pub async fn list_comments(
+    db: &PgPool,
+    recipe_id: i64,
+    last_id: Option<i64>,
+    limit: i64,
+) -> Result<Vec<RecipeComment>, sqlx::Error> {
+    let comments = if let Some(last_id) = last_id {
+        query_as::<_, RecipeComment>(
+            "SELECT * FROM recipe_comments WHERE recipe_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3"
+        )
+        .bind(recipe_id)
+        .bind(last_id)
+        .bind(limit)
+        .fetch_all(db)
+        .await?
+    } else {
+        query_as::<_, RecipeComment>(
+            "SELECT * FROM recipe_comments WHERE recipe_id = $1 ORDER BY id DESC LIMIT $2",
+        )
+        .bind(recipe_id)
+        .bind(limit)
+        .fetch_all(db)
+        .await?
+    };
+    Ok(comments)
+}

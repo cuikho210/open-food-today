@@ -1,11 +1,16 @@
 use crate::{handler, RecipeCommentsState};
-use axum::{middleware, routing::post, Router};
+use axum::{
+    middleware,
+    routing::{get, post},
+    Router,
+};
 use common::middlewares::authentication;
 use tower_http::trace::TraceLayer;
 
 fn make_private_router() -> Router<RecipeCommentsState> {
     Router::new()
         .route("/recipes/{id}", post(handler::create_comment))
+        .route("/recipes/{id}", get(handler::list_comments))
         .layer(middleware::from_fn(authentication))
 }
 

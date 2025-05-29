@@ -99,3 +99,59 @@ pub async fn test_get_random_recipe_success() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_list_comments_success() -> Result<()> {
+    setup_logging();
+
+    let recipe = create_recipe().await?;
+    let mut server = {
+        let app = make_app().await?;
+        make_service(app).await?
+    };
+
+    let token = env!("TEST_ACCESS_TOKEN");
+    let uri = format!("/recipes/{}", recipe.id);
+
+    // Create two comments for this recipe
+    let _cmt1 = {
+        let res = RequestBuilder::default()
+            .uri(&uri)
+            .bearer(token)
+            .json(&CreateCommentPayload {
+                reply_to: None,
+                content: "List Comment 1".to_string(),
+            })?
+            .post(&mut server)
+            .await?;
+        let res = res.assert_ok().await?;
+        res.json::<RecipeComment>().await?
+    };
+
+    let _cmt2 = {
+        let res = RequestBuilder::default()
+            .uri(&uri)
+            .bearer(token)
+            .json(&CreateCommentPayload {
+                reply_to: None,
+                content: "List Comment 2".to_string(),
+            })?
+            .post(&mut server)
+            .await?;
+        let res = res.assert_ok().await?;
+        res.json::<RecipeComment>().await?
+    };
+
+    // List comments for the recipe
+    let res = RequestBuilder::default()
+        .uri(&uri)
+        .bearer(token)
+        .query("limit", "10")
+        .get(&mut server)
+        .await?;
+    let res = res.assert_ok().await?;
+    let comments = res.json::<Vec<RecipeComment>>().await?;
+    assert!(comments.len() >= 2);
+
+    Ok(())
+}

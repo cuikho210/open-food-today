@@ -1,10 +1,13 @@
 use crate::{repo, RecipeCommentsState};
 use axum::{
-    extract::{Path, State},
+    extract::{Path, Query, State},
     Extension, Json,
 };
 use common::{dto::UserTokenClaims, AppError};
-use recipe_comments_models::{dto::CreateCommentPayload, entity::RecipeComment};
+use recipe_comments_models::{
+    dto::{CreateCommentPayload, PaginationData},
+    entity::RecipeComment,
+};
 
 pub async fn create_comment(
     State(state): State<RecipeCommentsState>,
@@ -44,4 +47,16 @@ pub async fn create_comment(
     .map_err(|e| AppError::InternalServer(format!("Failed to create comment: {}", e)))?;
 
     Ok(Json(recipe_comment))
+}
+
+pub async fn list_comments(
+    State(state): State<RecipeCommentsState>,
+    Path(recipe_id): Path<i64>,
+    Query(params): Query<PaginationData>,
+) -> Result<Json<Vec<RecipeComment>>, AppError> {
+    let limit = params.limit.unwrap_or(20);
+    let comments = repo::list_comments(&state.db, recipe_id, params.last_id, limit)
+        .await
+        .map_err(|e| AppError::InternalServer(format!("Failed to list comments: {}", e)))?;
+    Ok(Json(comments))
 }
