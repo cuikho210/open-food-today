@@ -1317,6 +1317,7 @@ dependencies = [
  "common-test",
  "eyre",
  "recipe-comments-models",
+ "recipes-models",
  "sqlx",
  "tokio",
  "tower-http",
@@ -1645,6 +1646,7 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "url",
+ "uuid",
 ]
 
 [[package]]
@@ -1726,6 +1728,7 @@ dependencies = [
  "stringprep",
  "thiserror",
  "tracing",
+ "uuid",
  "whoami",
 ]
 
@@ -1764,6 +1767,7 @@ dependencies = [
  "stringprep",
  "thiserror",
  "tracing",
+ "uuid",
  "whoami",
 ]
 
@@ -1790,6 +1794,7 @@ dependencies = [
  "thiserror",
  "tracing",
  "url",
+ "uuid",
 ]
 
 [[package]]

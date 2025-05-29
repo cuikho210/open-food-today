@@ -8,7 +8,6 @@ pub fn decode_jwt<T>(token: &str) -> Result<TokenData<T>>
 where
     T: DeserializeOwned,
 {
-    tracing::debug!("Token: {token}");
     let jwt_secret = get_jwt_secret()?;
     let decoding_key = DecodingKey::from_secret(jwt_secret.as_ref());
 

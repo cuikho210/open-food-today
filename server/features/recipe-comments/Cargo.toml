@@ -13,10 +13,16 @@ recipe-comments-models = { version = "0.1.0", path = "../recipe-comments-models"
 axum = "0.8.4"
 common = { version = "0.1.0", path = "../../common" }
 eyre = "0.6.12"
-sqlx = { version = "0.8.5", features = ["postgres", "runtime-tokio", "chrono"] }
+sqlx = { version = "0.8.5", features = [
+    "postgres",
+    "runtime-tokio",
+    "chrono",
+    "uuid",
+] }
 tower-http = { version = "0.6.4", features = ["trace"] }
 tracing = "0.1.41"
 
 [dev-dependencies]
 tokio = { version = "1.45.0", features = ["macros"] }
 common-test = { version = "0.1.0", path = "../../common-test" }
+recipes-models = { path = "../recipes-models" }
