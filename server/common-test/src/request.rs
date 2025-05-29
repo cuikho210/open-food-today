@@ -1,6 +1,10 @@
 use axum::{
     body::Body,
-    http::{header::AUTHORIZATION, request::Builder, Response},
+    http::{
+        header::{AUTHORIZATION, CONTENT_TYPE},
+        request::Builder,
+        HeaderName, HeaderValue, Response,
+    },
     routing::RouterIntoService,
 };
 use eyre::Result;
@@ -28,11 +32,22 @@ impl RequestBuilder {
         self
     }
 
-    pub fn bearer(mut self, bearer_value: impl Display) -> Result<Self> {
+    pub fn bearer(mut self, bearer_value: impl Display) -> Self {
         self.builder = self
             .builder
             .header(AUTHORIZATION, format!("Bearer {}", bearer_value));
-        Ok(self)
+        self
+    }
+
+    pub fn header<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: TryInto<HeaderName>,
+        <K as TryInto<HeaderName>>::Error: Into<axum::http::Error>,
+        V: TryInto<HeaderValue>,
+        <V as TryInto<HeaderValue>>::Error: Into<axum::http::Error>,
+    {
+        self.builder = self.builder.header(key, value);
+        self
     }
 
     pub fn query(mut self, key: impl ToString, value: &str) -> Self {
@@ -47,6 +62,7 @@ impl RequestBuilder {
     }
 
     pub fn json(mut self, json: &impl Serialize) -> Result<Self> {
+        self = self.header(CONTENT_TYPE, "application/json");
         let json_string = serde_json::to_string(json)?;
         self.body = Body::new(json_string);
         Ok(self)
@@ -54,6 +70,18 @@ impl RequestBuilder {
 
     pub async fn get(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
         self.send("GET", server).await
+    }
+
+    pub async fn post(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
+        self.send("POST", server).await
+    }
+
+    pub async fn put(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
+        self.send("PUT", server).await
+    }
+
+    pub async fn delete(self, server: &mut RouterIntoService<Body>) -> Result<Response<Body>> {
+        self.send("DELETE", server).await
     }
 
     async fn send(
@@ -77,6 +105,10 @@ impl RequestBuilder {
     }
 
     fn build_query(&self) -> String {
+        if self.query_map.is_empty() {
+            return String::new();
+        }
+
         let mut result = "?".to_string();
 
         for (index, (key, value)) in self.query_map.iter().enumerate() {
