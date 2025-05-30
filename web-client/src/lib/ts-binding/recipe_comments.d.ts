@@ -4,6 +4,20 @@ export type CreateCommentPayload = { reply_to: number | null; content: string };
 
 export type PaginationData = { limit: number | null; last_id: number | null };
 
+export type PublicRecipeComment = {
+	id: number;
+	recipe_id: number;
+	user_id: string;
+	parent_id: number | null;
+	reply_to: number | null;
+	level: number;
+	content: string;
+	created_at: string;
+	updated_at: string;
+	user_name: string;
+	user_avatar_url: string;
+};
+
 export type RecipeComment = {
 	id: number;
 	recipe_id: number;
