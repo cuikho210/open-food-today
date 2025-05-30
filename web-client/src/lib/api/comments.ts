@@ -1,3 +1,4 @@
+import { CacheType } from '$lib/caches/types.d';
 import type {
 	CreateCommentPayload,
 	PaginationData,
@@ -14,7 +15,14 @@ export function postComment(recipeId: number, payload: CreateCommentPayload, tok
 }
 
 export function listComments(recipeId: number, lastId?: number, limit?: number) {
-	return buildRequest('/comments/recipes/' + recipeId)
-		.query<PaginationData>({ limit: limit || null, last_id: lastId || null })
-		.get<PublicRecipeComment[]>();
+	const builder = buildRequest('/comments/recipes/' + recipeId).query<PaginationData>({
+		limit: limit || null,
+		last_id: lastId || null
+	});
+
+	if (lastId) {
+		builder.setCacheType(CacheType.ShortExpiration);
+	}
+
+	return builder.get<PublicRecipeComment[]>();
 }

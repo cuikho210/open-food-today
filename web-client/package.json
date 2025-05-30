@@ -16,7 +16,7 @@
 		"deploy": "bun run build && bun run wrangler:deploy"
 	},
 	"devDependencies": {
-		"@celar-ui/svelte": "^0.0.15",
+		"@celar-ui/svelte": "^0.0.16",
 		"@eslint/compat": "^1.2.9",
 		"@eslint/js": "^9.27.0",
 		"@iconify-json/hugeicons": "^1.2.5",

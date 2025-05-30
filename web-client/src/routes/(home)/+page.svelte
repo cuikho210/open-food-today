@@ -3,6 +3,7 @@
 	import { register } from 'swiper/element/bundle';
 	import { onMount } from 'svelte';
 	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
+	import { listComments } from '$lib/api/comments';
 	import {
 		AppBar,
 		Card,
@@ -20,6 +21,8 @@
 	import type { PageProps } from './$types';
 	import type { Swiper } from 'swiper/types';
 	import type { Recipe } from '$lib/ts-binding/recipes';
+	import type { PublicRecipeComment } from '$lib/ts-binding/recipe_comments';
+	import CommentCard from '$lib/components/CommentCard.svelte';
 
 	register();
 
@@ -29,13 +32,21 @@
 	let currentRecipe = $state<Recipe>(pageProps.data.initRecipes[0]);
 	let fetchLengh = pageProps.data.initRecipes.length;
 	let safeLength = 5;
-	let loading = $state(false);
+	let loadingRecipe = $state(false);
+
+	let likeCount = $state(0);
+
 	let openComments = $state(false);
+	let loadingComments = $state(false);
+	let commentCount = $state(0);
+	let comments = $state<PublicRecipeComment[]>([]);
 
 	let swiperEl: HTMLElement;
 
 	onMount(() => {
 		swiperEl.addEventListener('swiperslidechange', async (event) => {
+			comments = [];
+
 			const swiper = (event as CustomEvent).detail[0] as Swiper;
 			const activeIndex = swiper.activeIndex;
 
@@ -51,7 +62,7 @@
 
 			releaseRecipe(activeIndex - safeLength);
 
-			if (activeIndex > recipes.length - safeLength && !loading) {
+			if (activeIndex > recipes.length - safeLength && !loadingRecipe) {
 				await fetchMoreRecipes();
 			}
 		});
@@ -64,8 +75,21 @@
 		}
 	}
 
+	async function fetchRecipeComments(lastId?: number) {
+		loadingComments = true;
+
+		try {
+			const newComments = await listComments(currentRecipe.id, lastId);
+			comments = comments.concat(newComments);
+		} catch (e) {
+			console.error(e);
+		}
+
+		loadingComments = false;
+	}
+
 	async function fetchMoreRecipes() {
-		loading = true;
+		loadingRecipe = true;
 
 		try {
 			const moreRecipes = await getRandomRecipes(fetchLengh);
@@ -74,7 +98,7 @@
 			console.error(e);
 		}
 
-		loading = false;
+		loadingRecipe = false;
 	}
 
 	async function shareRecipe(): Promise<void> {
@@ -132,18 +156,34 @@
 <div class="section-fixed">
 	<Spacer wrap="nowrap" direction="column" align="center" gap="0">
 		<IconButton><IconFavourite class="icon-24" /></IconButton>
-		<span>0</span>
+		<span>{likeCount}</span>
 		<Gap size=".5rem" />
 
-		<IconButton onclick={() => (openComments = true)}><IconComment class="icon-24" /></IconButton>
-		<span>0</span>
+		<IconButton
+			onclick={() => {
+				openComments = true;
+				if (comments.length === 0 && !loadingComments) {
+					fetchRecipeComments();
+				}
+			}}><IconComment class="icon-24" /></IconButton
+		>
+		<span>{commentCount}</span>
 		<Gap size=".5rem" />
 
 		<IconButton onclick={shareRecipe}><IconShare class="icon-24" /></IconButton>
 	</Spacer>
 </div>
 
-<NavigationDrawer bind:open={openComments} position="right">Ahihi</NavigationDrawer>
+<NavigationDrawer bind:open={openComments} position="right" width="400px">
+	{#if loadingComments}
+		Loading...
+	{/if}
+
+	{#each comments as comment (comment.id)}
+		<CommentCard {...comment} />
+		<Gap size=".5rem" />
+	{/each}
+</NavigationDrawer>
 
 <style lang="scss">
 	.section-fixed {
