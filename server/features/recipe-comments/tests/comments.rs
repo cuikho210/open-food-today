@@ -4,10 +4,13 @@ use common::create_recipe;
 use common_test::{make_service, request::RequestBuilder, response::ResponseExt, setup_logging};
 use eyre::Result;
 use recipe_comments::make_app;
-use recipe_comments_models::{dto::CreateCommentPayload, entity::RecipeComment};
+use recipe_comments_models::{
+    dto::CreateCommentPayload,
+    entity::{PublicRecipeComment, RecipeComment},
+};
 
 #[tokio::test]
-pub async fn test_get_random_recipe_success() -> Result<()> {
+pub async fn test_post_comments_success() -> Result<()> {
     setup_logging();
 
     let recipe = create_recipe().await?;
@@ -150,7 +153,7 @@ pub async fn test_list_comments_success() -> Result<()> {
         .get(&mut server)
         .await?;
     let res = res.assert_ok().await?;
-    let comments = res.json::<Vec<RecipeComment>>().await?;
+    let comments = res.json::<Vec<PublicRecipeComment>>().await?;
     assert!(comments.len() >= 2);
 
     Ok(())

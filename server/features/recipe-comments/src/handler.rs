@@ -6,7 +6,7 @@ use axum::{
 use common::{dto::UserTokenClaims, AppError};
 use recipe_comments_models::{
     dto::{CreateCommentPayload, PaginationData},
-    entity::RecipeComment,
+    entity::{PublicRecipeComment, RecipeComment},
 };
 
 pub async fn create_comment(
@@ -53,7 +53,7 @@ pub async fn list_comments(
     State(state): State<RecipeCommentsState>,
     Path(recipe_id): Path<i64>,
     Query(params): Query<PaginationData>,
-) -> Result<Json<Vec<RecipeComment>>, AppError> {
+) -> Result<Json<Vec<PublicRecipeComment>>, AppError> {
     let limit = params.limit.unwrap_or(20);
     let comments = repo::list_comments(&state.db, recipe_id, params.last_id, limit)
         .await

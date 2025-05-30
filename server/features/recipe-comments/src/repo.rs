@@ -1,4 +1,4 @@
-use recipe_comments_models::entity::RecipeComment;
+use recipe_comments_models::entity::{PublicRecipeComment, RecipeComment};
 use sqlx::{query_as, types::Uuid, PgPool};
 
 pub async fn create_comment(
@@ -42,24 +42,22 @@ pub async fn list_comments(
     recipe_id: i64,
     last_id: Option<i64>,
     limit: i64,
-) -> Result<Vec<RecipeComment>, sqlx::Error> {
-    let comments = if let Some(last_id) = last_id {
-        query_as::<_, RecipeComment>(
-            "SELECT * FROM recipe_comments WHERE recipe_id = $1 AND id < $2 ORDER BY id DESC LIMIT $3"
-        )
-        .bind(recipe_id)
-        .bind(last_id)
-        .bind(limit)
-        .fetch_all(db)
-        .await?
-    } else {
-        query_as::<_, RecipeComment>(
-            "SELECT * FROM recipe_comments WHERE recipe_id = $1 ORDER BY id DESC LIMIT $2",
-        )
-        .bind(recipe_id)
-        .bind(limit)
-        .fetch_all(db)
-        .await?
-    };
+) -> Result<Vec<PublicRecipeComment>, sqlx::Error> {
+    let last_id = last_id.unwrap_or(0);
+    let comments = query_as::<_, PublicRecipeComment>(
+        "SELECT rc.*, 
+            u.raw_user_meta_data->>'name' as user_name, 
+            u.raw_user_meta_data->>'avatar_url' as user_avatar_url
+        FROM recipe_comments rc
+        LEFT JOIN auth.users u ON u.id = rc.user_id
+        WHERE rc.recipe_id = $1 AND rc.id > $2
+        ORDER BY rc.id ASC
+        LIMIT $3",
+    )
+    .bind(recipe_id)
+    .bind(last_id)
+    .bind(limit)
+    .fetch_all(db)
+    .await?;
     Ok(comments)
 }

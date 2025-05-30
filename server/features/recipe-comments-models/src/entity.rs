@@ -17,3 +17,19 @@ pub struct RecipeComment {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow, TS)]
+#[ts(export, export_to = "recipe_comments.d.ts")]
+pub struct PublicRecipeComment {
+    pub id: i64,
+    pub recipe_id: i64,
+    pub user_id: Uuid,
+    pub parent_id: Option<i64>,
+    pub reply_to: Option<i64>,
+    pub level: i16,
+    pub content: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub user_name: String,
+    pub user_avatar_url: String,
+}
