@@ -79,7 +79,7 @@
 </div>
 
 <Container sm style="padding: 0">
-	<swiper-container bind:this={swiperEl} direction="vertical" slides-per-view="1">
+	<swiper-container bind:this={swiperEl} direction="vertical" slides-per-view="1" mousewheel="true">
 		{#each recipes as recipe, index (index)}
 			<swiper-slide>
 				{#if typeof recipe == 'number'}
