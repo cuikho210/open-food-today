@@ -3,9 +3,20 @@
 	import { register } from 'swiper/element/bundle';
 	import { onMount } from 'svelte';
 	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
-	import { AppBar, Card, Container, Gap } from '@celar-ui/svelte';
+	import {
+		AppBar,
+		Card,
+		Container,
+		Gap,
+		IconButton,
+		Spacer,
+		NavigationDrawer
+	} from '@celar-ui/svelte';
 	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
 	import OpenLoginDialogButton from '$lib/components/OpenLoginDialogButton.svelte';
+	import IconFavourite from '~icons/hugeicons/favourite';
+	import IconComment from '~icons/hugeicons/bubble-chat';
+	import IconShare from '~icons/hugeicons/share-08';
 	import type { PageProps } from './$types';
 	import type { Swiper } from 'swiper/types';
 	import type { Recipe } from '$lib/ts-binding/recipes';
@@ -15,9 +26,11 @@
 	let pageProps: PageProps = $props();
 	let { user } = pageProps.data;
 	let recipes = $state<(Recipe | number)[]>(pageProps.data.initRecipes);
+	let currentRecipe = $state<Recipe>(pageProps.data.initRecipes[0]);
 	let fetchLengh = pageProps.data.initRecipes.length;
 	let safeLength = 5;
 	let loading = $state(false);
+	let openComments = $state(false);
 
 	let swiperEl: HTMLElement;
 
@@ -30,7 +43,10 @@
 				const recipe = await getRecipeById(recipes[activeIndex]);
 				if (recipe) {
 					recipes[activeIndex] = recipe;
+					currentRecipe = recipe;
 				}
+			} else {
+				currentRecipe = recipes[activeIndex];
 			}
 
 			releaseRecipe(activeIndex - safeLength);
@@ -59,6 +75,15 @@
 		}
 
 		loading = false;
+	}
+
+	async function shareRecipe(): Promise<void> {
+		if (currentRecipe == null || typeof currentRecipe == 'number') return;
+		await navigator.share({
+			title: currentRecipe.title,
+			text: currentRecipe.description || undefined,
+			url: currentRecipe.link || undefined
+		});
 	}
 </script>
 
@@ -104,7 +129,41 @@
 	</swiper-container>
 </Container>
 
+<div class="section-fixed">
+	<Spacer wrap="nowrap" direction="column" align="center" gap="0">
+		<IconButton><IconFavourite class="icon-24" /></IconButton>
+		<span>0</span>
+		<Gap size=".5rem" />
+
+		<IconButton onclick={() => (openComments = true)}><IconComment class="icon-24" /></IconButton>
+		<span>0</span>
+		<Gap size=".5rem" />
+
+		<IconButton onclick={shareRecipe}><IconShare class="icon-24" /></IconButton>
+	</Spacer>
+</div>
+
+<NavigationDrawer bind:open={openComments} position="right">Ahihi</NavigationDrawer>
+
 <style lang="scss">
+	.section-fixed {
+		position: fixed;
+		bottom: var(--gap);
+		right: var(--gap);
+		z-index: 10;
+		background-color: rgba(var(--color-bg--rgb), 0.88);
+		backdrop-filter: blur(var(--blur-length));
+		padding: var(--gap--sm);
+		border-radius: var(--radius);
+		border: 2px solid var(--color-bg);
+		box-shadow: 0 var(--gap--sm) var(--gap) var(--color-shadow--md);
+
+		span {
+			font-size: 0.8rem;
+			opacity: 0.8;
+		}
+	}
+
 	.appbar {
 		position: fixed;
 		top: 0;
