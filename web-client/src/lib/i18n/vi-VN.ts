@@ -10,7 +10,9 @@ export const messagesViVN: I18nSchema = {
 		unexpectedError: 'Lỗi không mong muốn',
 		login: 'Đăng nhập',
 		profile: 'Hồ sơ',
-		signOut: 'Đăng xuất'
+		signOut: 'Đăng xuất',
+		comment: 'Bình luận',
+		send: 'Gửi'
 	},
 	auth: {
 		error: {

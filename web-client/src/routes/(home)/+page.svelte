@@ -3,7 +3,7 @@
 	import { register } from 'swiper/element/bundle';
 	import { onMount } from 'svelte';
 	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
-	import { listComments } from '$lib/api/comments';
+	import { listComments, postComment } from '$lib/api/comments';
 	import {
 		AppBar,
 		Card,
@@ -11,7 +11,8 @@
 		Gap,
 		IconButton,
 		Spacer,
-		NavigationDrawer
+		NavigationDrawer,
+		FilledButton
 	} from '@celar-ui/svelte';
 	import AppSettingsButton from '$lib/components/AppSettingsButton.svelte';
 	import OpenLoginDialogButton from '$lib/components/OpenLoginDialogButton.svelte';
@@ -27,7 +28,7 @@
 	register();
 
 	let pageProps: PageProps = $props();
-	let { user } = pageProps.data;
+	let { user, session } = pageProps.data;
 	let recipes = $state<(Recipe | number)[]>(pageProps.data.initRecipes);
 	let currentRecipe = $state<Recipe>(pageProps.data.initRecipes[0]);
 	let fetchLengh = pageProps.data.initRecipes.length;
@@ -40,6 +41,8 @@
 	let loadingComments = $state(false);
 	let commentCount = $state(0);
 	let comments = $state<PublicRecipeComment[]>([]);
+	let commentInputContent = $state('');
+	let loadingPostComment = $state(false);
 
 	let swiperEl: HTMLElement;
 
@@ -108,6 +111,35 @@
 			text: currentRecipe.description || undefined,
 			url: currentRecipe.link || undefined
 		});
+	}
+
+	async function submitComment(event: Event) {
+		event.preventDefault();
+
+		if (loadingPostComment) return;
+
+		commentInputContent = commentInputContent.trim();
+		if (!commentInputContent) return console.warn('commentInputContent is empty');
+
+		loadingPostComment = true;
+
+		try {
+			const comment = await postComment(
+				currentRecipe.id,
+				{ reply_to: null, content: commentInputContent },
+				session?.access_token || ''
+			);
+			comments.push({
+				...comment,
+				user_name: user?.user_metadata.name || '',
+				user_avatar_url: user?.user_metadata.avatar_url || ''
+			});
+			commentInputContent = '';
+		} catch (e) {
+			console.error(e);
+		}
+
+		loadingPostComment = false;
 	}
 </script>
 
@@ -183,9 +215,42 @@
 		<CommentCard {...comment} />
 		<Gap size=".5rem" />
 	{/each}
+
+	{#snippet footer()}
+		<form onsubmit={submitComment}>
+			<Spacer wrap="nowrap">
+				<textarea
+					class="comment-input"
+					placeholder={$t.common.comment}
+					bind:value={commentInputContent}
+				></textarea>
+				<FilledButton type="submit" loading={loadingPostComment}>{$t.common.send}</FilledButton>
+			</Spacer>
+		</form>
+	{/snippet}
 </NavigationDrawer>
 
 <style lang="scss">
+	.comment-input {
+		width: 100%;
+		min-height: 3rem;
+		height: 5rem;
+		max-height: 300px;
+		padding: var(--gap--md);
+		border-radius: var(--radius--half);
+		border: none;
+		outline: 1px solid var(--color-primary);
+		transition-duration: var(--transition-dur);
+		transition-property: outline-color;
+		resize: vertical;
+		font-size: inherit;
+		font-family: inherit;
+
+		&:hover {
+			outline-color: var(--color-primary--darker);
+		}
+	}
+
 	.section-fixed {
 		position: fixed;
 		bottom: var(--gap);

@@ -8,7 +8,9 @@ export const messagesEnUS = {
 		unexpectedError: 'An unexpected error occurred.',
 		login: 'Login',
 		profile: 'Profile',
-		signOut: 'Sign Out'
+		signOut: 'Sign Out',
+		comment: 'Comment',
+		send: 'Send'
 	},
 	auth: {
 		error: {
