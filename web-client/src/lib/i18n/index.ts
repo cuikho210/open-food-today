@@ -19,7 +19,7 @@ export const t = writable<I18nSchema>();
 
 const cookieName = 'app-locale';
 
-export function init(cookies?: Cookies) {
+export async function init(cookies?: Cookies) {
 	let storedLocaleKey: I18nLocale = 'vi-VN';
 
 	if (cookies) {
@@ -34,7 +34,7 @@ export function init(cookies?: Cookies) {
 		}
 	}
 
-	setLocale(storedLocaleKey);
+	await setLocale(storedLocaleKey);
 }
 
 export async function setLocale(localeCode: I18nLocale) {

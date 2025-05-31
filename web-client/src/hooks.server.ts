@@ -80,7 +80,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 };
 
 const i18n: Handle = async ({ event, resolve }) => {
-	initI18n(event.cookies);
+	await initI18n(event.cookies);
 	return resolve(event);
 };
 
