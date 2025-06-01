@@ -1,7 +1,10 @@
 mod common;
 
 use common::create_recipe;
-use common_test::{make_service, request::RequestBuilder, response::ResponseExt, setup_logging};
+use common_test::{
+    auth::signup_random, make_service, request::RequestBuilder, response::ResponseExt,
+    setup_logging,
+};
 use eyre::Result;
 use recipe_comments::make_app;
 use recipe_comments_models::{
@@ -20,13 +23,13 @@ pub async fn test_post_comments_success() -> Result<()> {
         make_service(app).await?
     };
 
-    let token = env!("TEST_ACCESS_TOKEN");
+    let token = signup_random().await?;
     let uri = format!("/recipes/{}", recipe.id);
 
     let cmt1 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: None,
                 content: "Comment 1".to_string(),
@@ -40,7 +43,7 @@ pub async fn test_post_comments_success() -> Result<()> {
     let cmt2 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: Some(cmt1.id),
                 content: "Comment 2".to_string(),
@@ -54,7 +57,7 @@ pub async fn test_post_comments_success() -> Result<()> {
     let cmt3 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: Some(cmt2.id),
                 content: "Comment 3".to_string(),
@@ -68,7 +71,7 @@ pub async fn test_post_comments_success() -> Result<()> {
     let cmt4 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: Some(cmt3.id),
                 content: "Comment 4".to_string(),
@@ -113,14 +116,14 @@ pub async fn test_list_comments_success() -> Result<()> {
         make_service(app).await?
     };
 
-    let token = env!("TEST_ACCESS_TOKEN");
+    let token = signup_random().await?;
     let uri = format!("/recipes/{}", recipe.id);
 
     // Create two comments for this recipe
     let _cmt1 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: None,
                 content: "List Comment 1".to_string(),
@@ -134,7 +137,7 @@ pub async fn test_list_comments_success() -> Result<()> {
     let _cmt2 = {
         let res = RequestBuilder::default()
             .uri(&uri)
-            .bearer(token)
+            .bearer(&token)
             .json(&CreateCommentPayload {
                 reply_to: None,
                 content: "List Comment 2".to_string(),
@@ -148,7 +151,7 @@ pub async fn test_list_comments_success() -> Result<()> {
     // List comments for the recipe
     let res = RequestBuilder::default()
         .uri(&uri)
-        .bearer(token)
+        .bearer(&token)
         .query("limit", "10")
         .get(&mut server)
         .await?;

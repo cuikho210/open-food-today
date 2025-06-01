@@ -14,8 +14,8 @@ export type PublicRecipeComment = {
 	content: string;
 	created_at: string;
 	updated_at: string;
-	user_name: string;
-	user_avatar_url: string;
+	user_name: string | null;
+	user_avatar_url: string | null;
 };
 
 export type RecipeComment = {

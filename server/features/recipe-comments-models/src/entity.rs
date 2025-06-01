@@ -30,6 +30,6 @@ pub struct PublicRecipeComment {
     pub content: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
-    pub user_name: String,
-    pub user_avatar_url: String,
+    pub user_name: Option<String>,
+    pub user_avatar_url: Option<String>,
 }

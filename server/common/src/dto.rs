@@ -8,7 +8,7 @@ pub struct BearerToken(pub String);
 #[derive(Debug, Clone, Serialize, Deserialize, TS, Hash, PartialEq, Eq)]
 #[ts(export, export_to = "common.d.ts")]
 pub struct UserTokenClaims {
-    pub iss: String,
+    pub iss: Option<String>,
     pub sub: Uuid,
     pub aud: String,
     pub exp: i64,
