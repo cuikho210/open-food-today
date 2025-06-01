@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS recipe_likes (
     UNIQUE(recipe_id, user_id) -- Prevent duplicate likes from same user
 );
 
+ALTER TABLE recipe_likes ENABLE ROW LEVEL SECURITY;
+
 -- Add index on recipe_id for efficient lookup of likes for a recipe
 CREATE INDEX IF NOT EXISTS idx_recipe_likes_recipe_id ON recipe_likes (recipe_id);
 

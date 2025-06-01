@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS recipe_comments (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE recipe_comments ENABLE ROW LEVEL SECURITY;
+
 -- Add index on user_id for efficient lookup of comments by user
 CREATE INDEX IF NOT EXISTS idx_recipe_comments_user_id ON recipe_comments (user_id);
 
