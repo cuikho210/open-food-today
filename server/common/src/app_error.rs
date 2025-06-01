@@ -31,6 +31,9 @@ pub enum AppError {
 
     #[error("{0}")]
     Validation(String),
+
+    #[error("{0}")]
+    BadRequest(String),
 }
 impl AppError {
     pub fn to_error_code(&self) -> String {
@@ -40,6 +43,7 @@ impl AppError {
             Self::Unauthorized(_) => "UNAUTHORIZED".to_string(),
             Self::Forbidden(_) => "FORBIDDEN".to_string(),
             Self::Validation(_) => "VALIDATION".to_string(),
+            Self::BadRequest(_) => "BAD_REQUEST".to_string(),
         }
     }
 

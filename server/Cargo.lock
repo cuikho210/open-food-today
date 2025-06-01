@@ -1337,6 +1337,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "recipe-likes"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "common",
+ "eyre",
+ "recipe-likes-models",
+ "sqlx",
+ "tokio",
+ "tower-http",
+]
+
+[[package]]
+name = "recipe-likes-models"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "sqlx",
+ "ts-rs",
+ "uuid",
+]
+
+[[package]]
 name = "recipes"
 version = "0.1.0"
 dependencies = [

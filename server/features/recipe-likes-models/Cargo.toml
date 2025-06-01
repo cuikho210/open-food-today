@@ -1,0 +1,16 @@
+[package]
+name = "recipe-likes-models"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+sqlx = { version = "0.8.5", features = [] }
+ts-rs = { version = "10.1.0", features = ["chrono-impl", "uuid-impl"] }
+uuid = { version = "1.17", features = ["serde"] }

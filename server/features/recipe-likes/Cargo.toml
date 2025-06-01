@@ -1,0 +1,20 @@
+[package]
+name = "recipe-likes"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+common = { version = "0.1.0", path = "../../common" }
+recipe-likes-models = { path = "../recipe-likes-models" }
+axum = "0.8.4"
+sqlx = { version = "0.8.5", features = ["postgres", "chrono", "uuid"] }
+eyre = "0.6.12"
+tower-http = { version = "0.6.4", features = ["trace"] }
+
+[dev-dependencies]
+tokio = { version = "1.45.0", features = ["macros"] }
