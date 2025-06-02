@@ -12,9 +12,16 @@ version.workspace = true
 common = { version = "0.1.0", path = "../../common" }
 recipe-likes-models = { path = "../recipe-likes-models" }
 axum = "0.8.4"
-sqlx = { version = "0.8.5", features = ["postgres", "chrono", "uuid"] }
+sqlx = { version = "0.8.5", features = [
+    "postgres",
+    "runtime-tokio",
+    "chrono",
+    "uuid",
+] }
 eyre = "0.6.12"
 tower-http = { version = "0.6.4", features = ["trace"] }
 
 [dev-dependencies]
 tokio = { version = "1.45.0", features = ["macros"] }
+recipes-models = { path = "../recipes-models" }
+common-test = { version = "0.1.0", path = "../../common-test" }
