@@ -14,7 +14,7 @@ export function postComment(recipeId: number, payload: CreateCommentPayload, tok
 		.post<RecipeComment>();
 }
 
-export function listComments(recipeId: number, lastId?: number, limit?: number) {
+function buildListComments(recipeId: number, lastId?: number, limit?: number) {
 	const builder = buildRequest('/comments/recipes/' + recipeId).query<PaginationData>({
 		limit: limit || null,
 		last_id: lastId || null
@@ -22,7 +22,17 @@ export function listComments(recipeId: number, lastId?: number, limit?: number) 
 
 	if (lastId) {
 		builder.setCacheType(CacheType.ShortExpiration);
+	} else {
+		builder.setCacheType(CacheType.SessionOnly);
 	}
 
-	return builder.get<PublicRecipeComment[]>();
+	return builder;
+}
+
+export function listComments(recipeId: number, lastId?: number, limit?: number) {
+	return buildListComments(recipeId, lastId, limit).get<PublicRecipeComment[]>();
+}
+
+export function deleteListCommentsCache(recipeId: number, lastId?: number, limit?: number) {
+	return buildListComments(recipeId, lastId, limit).deleteCache();
 }
