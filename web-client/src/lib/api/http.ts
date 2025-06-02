@@ -1,6 +1,6 @@
 import { CacheType } from '$lib/caches/types.d';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
-import { matchCacheByUri, putCache } from '../caches/cache';
+import { deleteCacheByUri, matchCacheByUri, putCache } from '../caches/cache';
 import { ApiError, ApiErrorCode } from '../error';
 import { API_BASE } from './config';
 import type { ErrorResponse } from '$lib/ts-binding/common';
@@ -94,6 +94,11 @@ class Http {
 
 		putCache(this.cacheType, url, res);
 		return res.data;
+	}
+
+	public async deleteCache() {
+		const url = makeUrl(this.base, this.uri, this.queryString || '');
+		await deleteCacheByUri(this.cacheType, url);
 	}
 
 	public get<T>() {

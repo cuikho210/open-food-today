@@ -62,6 +62,18 @@ export async function putCache(cacheType: CacheType, uri: string, response: Axio
 	await cache.put(uri, cacheResponse);
 }
 
+export async function deleteCacheByUri(cacheType: CacheType, uri: string) {
+	if (cacheType === CacheType.NoCache) return;
+
+	if (cacheType === CacheType.SessionOnly) {
+		const cache = await openSessionStorage();
+		return cache.delete(uri);
+	}
+
+	const cache = await openDefaultStorage();
+	await cache.delete(uri);
+}
+
 export async function clearCacheWithCondition(condition: (url: string) => boolean) {
 	const cache = await openDefaultStorage();
 	const keys = await cache.keys();
