@@ -16,7 +16,7 @@ pub async fn test_get_random_recipe_success() -> Result<()> {
         .uri("/random")
         .get(&mut server)
         .await?;
-    let recipe: Recipe = res.json().await?;
+    let recipe: Option<Recipe> = res.json().await?;
     tracing::info!("Get a recipe: {:#?}", recipe);
 
     Ok(())
