@@ -3,7 +3,8 @@
 	import { register } from 'swiper/element/bundle';
 	import { onMount } from 'svelte';
 	import { getRandomRecipes, getRecipeById } from '$lib/api/recipes';
-	import { listComments, postComment } from '$lib/api/comments';
+	import { deleteListCommentsCache, listComments, postComment } from '$lib/api/comments';
+	import { checkLike, createLike, deleteCheckLikeCache, deleteLike } from '$lib/api/likes';
 	import {
 		AppBar,
 		Card,
@@ -21,7 +22,7 @@
 	import IconShare from '~icons/hugeicons/share-08';
 	import type { PageProps } from './$types';
 	import type { Swiper } from 'swiper/types';
-	import type { Recipe } from '$lib/ts-binding/recipes';
+	import type { PublicRecipe } from '$lib/ts-binding/recipes';
 	import type { PublicRecipeComment } from '$lib/ts-binding/recipe_comments';
 	import CommentCard from '$lib/components/CommentCard.svelte';
 
@@ -29,20 +30,24 @@
 
 	let pageProps: PageProps = $props();
 	let { user, session } = pageProps.data;
-	let recipes = $state<(Recipe | number)[]>(pageProps.data.initRecipes);
-	let currentRecipe = $state<Recipe>(pageProps.data.initRecipes[0]);
+	let recipes = $state<(PublicRecipe | number)[]>(pageProps.data.initRecipes);
+	let currentRecipeIndex = $state(0);
+	let currentRecipe = $derived(recipes[currentRecipeIndex]);
+	let currentRecipeId = $derived(
+		typeof currentRecipe == 'number' ? currentRecipe : currentRecipe.id
+	);
 	let fetchLengh = pageProps.data.initRecipes.length;
 	let safeLength = 5;
 	let loadingRecipe = $state(false);
 
-	let likeCount = $state(0);
-
 	let openComments = $state(false);
 	let loadingComments = $state(false);
-	let commentCount = $state(0);
 	let comments = $state<PublicRecipeComment[]>([]);
 	let commentInputContent = $state('');
 	let loadingPostComment = $state(false);
+
+	let isLiked = $state(false);
+	let loadingLike = $state(false);
 
 	let swiperEl: HTMLElement;
 
@@ -51,25 +56,63 @@
 			comments = [];
 
 			const swiper = (event as CustomEvent).detail[0] as Swiper;
-			const activeIndex = swiper.activeIndex;
+			currentRecipeIndex = swiper.activeIndex;
 
-			if (typeof recipes[activeIndex] === 'number') {
-				const recipe = await getRecipeById(recipes[activeIndex]);
+			if (typeof recipes[currentRecipeIndex] === 'number') {
+				const recipe = await getRecipeById(currentRecipeId);
 				if (recipe) {
-					recipes[activeIndex] = recipe;
-					currentRecipe = recipe;
+					recipes[currentRecipeIndex] = recipe;
+					currentRecipe = recipes[currentRecipeIndex];
 				}
 			} else {
-				currentRecipe = recipes[activeIndex];
+				currentRecipe = recipes[currentRecipeIndex];
 			}
 
-			releaseRecipe(activeIndex - safeLength);
+			updateLikeStatus();
+			releaseRecipe(currentRecipeIndex - safeLength);
 
-			if (activeIndex > recipes.length - safeLength && !loadingRecipe) {
+			if (currentRecipeIndex > recipes.length - safeLength && !loadingRecipe) {
 				await fetchMoreRecipes();
 			}
 		});
 	});
+
+	async function toggleLike() {
+		if (!session || typeof currentRecipe == 'number') return;
+
+		loadingLike = true;
+
+		try {
+			if (isLiked) {
+				await deleteLike(currentRecipe.id, session.access_token);
+				isLiked = false;
+				if (currentRecipe.likes_count !== null) currentRecipe.likes_count -= 1;
+			} else {
+				await createLike(currentRecipe.id, session.access_token);
+				isLiked = true;
+				if (currentRecipe.likes_count !== null) currentRecipe.likes_count += 1;
+			}
+
+			if (user) {
+				deleteCheckLikeCache(currentRecipe.id, user.id);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+
+		loadingLike = false;
+	}
+
+	async function updateLikeStatus() {
+		if (!user) return;
+
+		try {
+			let stats = await checkLike(currentRecipeId, user.id);
+			isLiked = stats.user_liked;
+		} catch (e) {
+			console.error(e);
+		}
+	}
 
 	function releaseRecipe(index: number) {
 		const recipe = recipes[index];
@@ -82,7 +125,7 @@
 		loadingComments = true;
 
 		try {
-			const newComments = await listComments(currentRecipe.id, lastId);
+			const newComments = await listComments(currentRecipeId, lastId);
 			comments = comments.concat(newComments);
 		} catch (e) {
 			console.error(e);
@@ -125,7 +168,7 @@
 
 		try {
 			const comment = await postComment(
-				currentRecipe.id,
+				currentRecipeId,
 				{ reply_to: null, content: commentInputContent },
 				session?.access_token || ''
 			);
@@ -135,6 +178,8 @@
 				user_avatar_url: user?.user_metadata.avatar_url || ''
 			});
 			commentInputContent = '';
+
+			await deleteListCommentsCache(currentRecipeId);
 		} catch (e) {
 			console.error(e);
 		}
@@ -185,26 +230,30 @@
 	</swiper-container>
 </Container>
 
-<div class="section-fixed">
-	<Spacer wrap="nowrap" direction="column" align="center" gap="0">
-		<IconButton><IconFavourite class="icon-24" /></IconButton>
-		<span>{likeCount}</span>
-		<Gap size=".5rem" />
+{#if typeof currentRecipe !== 'number'}
+	<div class="section-fixed">
+		<Spacer wrap="nowrap" direction="column" align="center" gap="0">
+			<IconButton active={isLiked} loading={loadingLike} onclick={toggleLike}
+				><IconFavourite class="icon-24" /></IconButton
+			>
+			<span>{currentRecipe.likes_count || 0}</span>
+			<Gap size=".5rem" />
 
-		<IconButton
-			onclick={() => {
-				openComments = true;
-				if (comments.length === 0 && !loadingComments) {
-					fetchRecipeComments();
-				}
-			}}><IconComment class="icon-24" /></IconButton
-		>
-		<span>{commentCount}</span>
-		<Gap size=".5rem" />
+			<IconButton
+				onclick={() => {
+					openComments = true;
+					if (comments.length === 0 && !loadingComments) {
+						fetchRecipeComments();
+					}
+				}}><IconComment class="icon-24" /></IconButton
+			>
+			<span>{currentRecipe.comments_count}</span>
+			<Gap size=".5rem" />
 
-		<IconButton onclick={shareRecipe}><IconShare class="icon-24" /></IconButton>
-	</Spacer>
-</div>
+			<IconButton onclick={shareRecipe}><IconShare class="icon-24" /></IconButton>
+		</Spacer>
+	</div>
+{/if}
 
 <NavigationDrawer bind:open={openComments} position="right" width="400px">
 	{#if loadingComments}
