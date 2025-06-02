@@ -8,7 +8,7 @@ pub async fn signup(email: impl Serialize, password: impl Serialize) -> Result<S
     let token = get_supabase_anon_key()?;
     let client = reqwest::Client::new();
     let res = client
-        .post(&format!("{}/auth/v1/signup", host))
+        .post(format!("{}/auth/v1/signup", host))
         .header("apikey", token)
         .json(&json!({
             "email": email,
