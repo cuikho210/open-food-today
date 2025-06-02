@@ -7,6 +7,8 @@ export const messagesEnUS = {
 		language: 'Language',
 		unexpectedError: 'An unexpected error occurred.',
 		login: 'Login',
+		loginWithGoogle: 'Continue with Google',
+		loginToInteract: 'Please login to like and comment on recipes',
 		profile: 'Profile',
 		signOut: 'Sign Out',
 		comment: 'Comment',

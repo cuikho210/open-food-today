@@ -9,6 +9,8 @@ export const messagesViVN: I18nSchema = {
 		language: 'Ngôn ngữ',
 		unexpectedError: 'Lỗi không mong muốn',
 		login: 'Đăng nhập',
+		loginWithGoogle: 'Tiếp tục với Google',
+		loginToInteract: 'Vui lòng đăng nhập để thích và bình luận công thức',
 		profile: 'Hồ sơ',
 		signOut: 'Đăng xuất',
 		comment: 'Bình luận',

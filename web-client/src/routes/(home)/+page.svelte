@@ -25,6 +25,7 @@
 	import type { PublicRecipe } from '$lib/ts-binding/recipes';
 	import type { PublicRecipeComment } from '$lib/ts-binding/recipe_comments';
 	import CommentCard from '$lib/components/CommentCard.svelte';
+	import { layout } from '$lib/stores/layout.svelte';
 
 	register();
 
@@ -78,7 +79,12 @@
 	});
 
 	async function toggleLike() {
-		if (!session || typeof currentRecipe == 'number') return;
+		if (typeof currentRecipe == 'number') return;
+
+		if (!session) {
+			layout.openLoginDialog = true;
+			return;
+		}
 
 		loadingLike = true;
 
@@ -159,6 +165,11 @@
 	async function submitComment(event: Event) {
 		event.preventDefault();
 
+		if (!session) {
+			layout.openLoginDialog = true;
+			return;
+		}
+
 		if (loadingPostComment) return;
 
 		commentInputContent = commentInputContent.trim();
@@ -170,7 +181,7 @@
 			const comment = await postComment(
 				currentRecipeId,
 				{ reply_to: null, content: commentInputContent },
-				session?.access_token || ''
+				session.access_token
 			);
 			comments.push({
 				...comment,
@@ -241,6 +252,10 @@
 
 			<IconButton
 				onclick={() => {
+					if (!session) {
+						layout.openLoginDialog = true;
+						return;
+					}
 					openComments = true;
 					if (comments.length === 0 && !loadingComments) {
 						fetchRecipeComments();
@@ -266,20 +281,40 @@
 	{/each}
 
 	{#snippet footer()}
-		<form onsubmit={submitComment}>
-			<Spacer wrap="nowrap">
-				<textarea
-					class="comment-input"
-					placeholder={$t.common.comment}
-					bind:value={commentInputContent}
-				></textarea>
-				<FilledButton type="submit" loading={loadingPostComment}>{$t.common.send}</FilledButton>
-			</Spacer>
-		</form>
+		{#if session}
+			<form onsubmit={submitComment}>
+				<Spacer wrap="nowrap">
+					<textarea
+						class="comment-input"
+						placeholder={$t.common.comment}
+						bind:value={commentInputContent}
+					></textarea>
+					<FilledButton type="submit" loading={loadingPostComment}>{$t.common.send}</FilledButton>
+				</Spacer>
+			</form>
+		{:else}
+			<div class="login-prompt">
+				<p>{$t.common.loginToInteract}</p>
+				<FilledButton onclick={() => (layout.openLoginDialog = true)}
+					>{$t.common.login}</FilledButton
+				>
+			</div>
+		{/if}
 	{/snippet}
 </NavigationDrawer>
 
 <style lang="scss">
+	.login-prompt {
+		text-align: center;
+		padding: var(--gap);
+
+		p {
+			color: var(--color-text);
+			margin-bottom: var(--gap);
+			font-size: 0.9rem;
+		}
+	}
+
 	.comment-input {
 		width: 100%;
 		min-height: 3rem;
