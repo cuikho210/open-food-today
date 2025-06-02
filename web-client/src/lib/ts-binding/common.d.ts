@@ -5,6 +5,21 @@ export type AppError =
 	| { InternalServer: string }
 	| { Unauthorized: string }
 	| { Forbidden: string }
-	| { Validation: string };
+	| { Validation: string }
+	| { BadRequest: string };
 
 export type ErrorResponse = { error_code: string; message: string };
+
+export type UserTokenClaims = {
+	iss: string | null;
+	sub: string;
+	aud: string;
+	exp: number;
+	iat: number;
+	email: string | null;
+	phone: string | null;
+	role: string;
+	aal: string | null;
+	session_id: string;
+	is_anonymous: boolean;
+};
