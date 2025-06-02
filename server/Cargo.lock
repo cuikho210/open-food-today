@@ -423,6 +423,7 @@ dependencies = [
  "common",
  "eyre",
  "recipe-comments",
+ "recipe-likes",
  "recipes",
  "tokio",
  "tracing",

@@ -15,6 +15,7 @@ common = { version = "0.1.0", path = "../common" }
 eyre = "0.6.12"
 recipes = { version = "0.1.0", path = "../features/recipes" }
 recipe-comments = { version = "0.1.0", path = "../features/recipe-comments" }
+recipe-likes = { version = "0.1.0", path = "../features/recipe-likes" }
 tokio = { version = "1.45.0", features = ["rt-multi-thread"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"

@@ -28,8 +28,10 @@ async fn main() -> Result<()> {
 async fn make_app() -> Result<Router> {
     let recipes = recipes::make_app().await?;
     let recipe_comments = recipe_comments::make_app().await?;
+    let recipe_likes = recipe_likes::make_app().await?;
     Ok(Router::new()
         .nest("/recipes", recipes)
         .nest("/comments", recipe_comments)
+        .nest("/likes", recipe_likes)
         .layer(cors()))
 }
